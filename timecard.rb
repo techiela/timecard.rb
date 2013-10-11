@@ -50,13 +50,12 @@ class Timecard
     # systemログを開く
     handle = EventLog.open('system')
 
+    i = 0
     # 直近の10000行を読み込むようにオフセットを計算する
-    offset = handle.total_records() - 10000
-    if offset < 0
-      offset = 0
-    end
-
-    handle.read(EventLog::SEEK_READ | EventLog::FORWARDS_READ , offset) do |log|
+    handle.read(EventLog::SEQUENTIAL_READ | EventLog::BACKWARDS_READ) do |log|
+      if 10000 <= i += 1
+        break
+      end
       # 先月・今月のデータのみを処理対象とする
       if log.time_written.month != currentMonth &&
          log.time_written.month != prevMonth
